@@ -6,7 +6,7 @@ module Play where
 -- :load Play
 import Prison
 import System.IO
-import MiniMax
+--import MiniMax
 
 type TournammentState = (Int) -- your points
 
@@ -68,6 +68,6 @@ computer_play game result opponent tournament_state =
             person_play game (game (Move opponent_move state)) opponent tournament_state
       
 
--- play magicsum (magicsum Start) simple_player (0,0,0)
--- play magicsum (magicsum Start) mm_player (0,0,0) -- minimax player
+-- play prison (prison Start) simple_player (0)
+-- play prison (prison Start) mm_player (0) -- todo: filled this with players with different strategies
 
