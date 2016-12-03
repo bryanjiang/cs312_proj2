@@ -16,6 +16,7 @@ play game start opponent tournament_state =
   let (points) = tournament_state in
 	   do
       putStrLn ("Tournament results: "++ show points++ " points ")
+      putStrLn "Rules: choose 1 for cooperative and 0 for betray. when one player betrays and the other cooperated. The traitor would get 5 points, if both cooperative, both would get 3 points. And last both players will get 1 if they betray each other"
       putStrLn "Who starts? 0=you, 1=computer, 2=exit."
       line <- getLine
       if (read line :: Int)==0
@@ -30,14 +31,11 @@ play game start opponent tournament_state =
 person_play :: Game -> Result -> Player -> TournammentState -> IO TournammentState
 -- opponent has played, the person must now play
 
-person_play game (EndOfGame 1) opponent (points) =
+person_play game (EndOfGame y) opponent (points) =
    do
       putStrLn "Computer won!"
-      play game (game Start) opponent (points)
-person_play game (EndOfGame 0) opponent (points) =
-   do
-      putStrLn "I't a draw"
-      play game (game Start) opponent (points)
+      play game (game Start) opponent (points + y)
+
 person_play game (ContinueGame state avail) opponent tournament_state =
    do
       putStrLn ("State is "++show state++" choose one of "++show avail)
@@ -50,15 +48,11 @@ computer_play :: Game -> Result -> Player -> TournammentState -> IO TournammentS
 -- computer_play game current_result opponent tournament_state
 -- person has played, the computer must now play
 
-computer_play game (EndOfGame 1) opponent (points) =
+computer_play game (EndOfGame x) opponent (points) =
    do
       putStrLn "You won!"
-      play game (game Start) opponent (points)
-computer_play game (EndOfGame 0) opponent (points) =
-   do
-      putStrLn "I't a draw"
-      play game (game Start) opponent (points)
-      
+      play game (game Start) opponent (points + x)
+
 computer_play game result opponent tournament_state =
       let ContinueGame state _ = result
           opponent_move = opponent game result

@@ -23,9 +23,7 @@ type Player = Game -> Result -> AMove
 
 prison :: Game
 prison (Move move (mine, others))
-    | length mine + length others == 10 && (win mine others) < 0  = EndOfGame 2      -- i lose
-    | length mine + length others == 10 && (win mine others) > 0  = EndOfGame 1     -- i win
-    | length mine + length others == 10 && (win mine others) == 0  = EndOfGame 0      -- draw
+    | length mine + length others == 10  = EndOfGame (win mine others)      -- give points
     | otherwise                         =
           ContinueGame (others, move:mine)
                  [act | act <- [0..1]]
@@ -38,7 +36,8 @@ win [] [] = 0
 win [] _ = 0
 win _ [] = 0
 win (x1:x1s) (x2:x2s)
-	| x1==1 && x2==0 = -5 + win x1s x2s
+	| x1==1 && x2==1 = 3 + win x1s x2s
+	| x1==0 && x2==0 = 1 + win x1s x2s
 	| x1==0 && x2==1 = 5 + win x1s x2s
 	|otherwise = win x1s x2s
 
